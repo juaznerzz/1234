@@ -19,7 +19,7 @@ app.post('/validate', async (req, res) => {
 
     try {
         // Consulta a Supabase REST API
-        const { data } = await axios.get('https://rscbunzafavbqopxvwpq.supabase.co/rest/v1/licences_test', {
+        const { data } = await axios.get('https://rscbunzafavbqopxvwpq.supabase.co/rest/v1/licencias_test', {
             params: {
                 sub_key: `eq.${sub_key}`,
                 user_id: `eq.${user_id}`,   // <-- Aquí también usa user_id
