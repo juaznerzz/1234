@@ -1,8 +1,10 @@
 const express = require("express");
+const cors = require("cors");
 const { OAuth2Client } = require("google-auth-library");
 const { createClient } = require("@supabase/supabase-js");
 
 const app = express();
+app.use(cors());  // <-- Agregado para permitir CORS
 app.use(express.json());
 
 // OAuth2 Client ID
@@ -11,7 +13,7 @@ const client = new OAuth2Client(CLIENT_ID);
 
 // Supabase
 const SUPABASE_URL = 'https://rscbunzafavbqopxvwpq.supabase.co';
-const SUPABASE_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzY2J1bnphZmF2YnFvcHh2d3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0MjA4MjYsImV4cCI6MjA2Mjk5NjgyNn0.zgiSaPIWP8JL_013-Zl8H_0mR_7uBSH3JmCOakFXm4o';
+const SUPABASE_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzY2J1bnphZmF2YnJvcHh2d3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0MjA4MjYsImV4cCI6MjA2Mjk5NjgyNn0.zgiSaPIWP8JL_013-Zl8H_0mR_7uBSH3JmCOakFXm4o';
 const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
 
 async function verifyToken(token) {
@@ -23,21 +25,26 @@ async function verifyToken(token) {
 }
 
 app.post("/validate", async (req, res) => {
+  console.log("Petición /validate recibida:", req.body);
+
   const { token, sub_key, unique_id, slug, mo_no, b_version, r_id } = req.body;
 
   if (!token) {
+    console.log("Falta token");
     return res.status(400).json({ valid: false, message: "Token OAuth no proporcionado" });
   }
 
   if (!sub_key) {
+    console.log("Falta sub_key");
     return res.status(400).json({ valid: false, message: "Falta la clave de licencia (sub_key)" });
   }
 
   try {
-    // Validar token OAuth
+    console.log("Verificando token OAuth...");
     const payload = await verifyToken(token);
+    console.log("Token válido para usuario:", payload.email);
 
-    // Validar licencia en Supabase
+    console.log("Buscando licencia en Supabase...");
     const { data, error } = await supabase
       .from('licencias_test')
       .select('*')
@@ -45,12 +52,12 @@ app.post("/validate", async (req, res) => {
       .single();
 
     if (error || !data) {
+      console.log("Licencia no válida o no encontrada:", error);
       return res.status(401).json({ valid: false, message: "Licencia inválida o no encontrada" });
     }
 
-    // Aquí podrías validar también otros campos (unique_id, slug, etc.) si quieres
+    console.log("Licencia válida encontrada:", data);
 
-    // Respuesta exitosa con datos del usuario y licencia
     return res.json({
       valid: true,
       user: {
@@ -71,3 +78,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor backend escuchando en puerto ${PORT}`);
 });
+
