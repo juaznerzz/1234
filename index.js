@@ -1,9 +1,13 @@
 const express = require("express");
+const cors = require("cors");  // Importa CORS
 const { createClient } = require("@supabase/supabase-js");
 const app = express();
 
 // Middleware para analizar solicitudes JSON
 app.use(express.json());
+
+// Configuración de CORS
+app.use(cors());  // Esto permite solicitudes desde cualquier origen, puedes configurarlo para limitar los orígenes si es necesario
 
 // Configuración de Supabase
 const SUPABASE_URL = 'https://rscbunzafavbqopxvwpq.supabase.co';  // URL de tu proyecto Supabase
