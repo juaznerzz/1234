@@ -38,12 +38,9 @@ app.post('/skip-validation', (req, res) => {
     }
 });
 
-// Configuración para el puerto en Render (usando la variable de entorno PORT)
-const PORT = process.env.PORT || 3000; // Si no se encuentra la variable de entorno, usa el puerto 3000
+// Usar el puerto asignado por Render o cualquier puerto disponible (3000 como fallback)
+const PORT = process.env.PORT || 3000;  // Render asigna automáticamente un puerto a través de la variable de entorno PORT
 app.listen(PORT, () => {
     console.log(`Servidor backend corriendo en http://localhost:${PORT}`);
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor backend corriendo en http://localhost:${PORT}`);
-});
