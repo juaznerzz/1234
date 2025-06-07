@@ -12,6 +12,7 @@ const corsOptions = {
 app.use(cors(corsOptions));  // Aplicar CORS con las opciones configuradas
 app.use(express.json());
 
+// Ruta para la validación de la licencia
 app.post('/skip-validation', (req, res) => {
     const { key } = req.body;
 
@@ -34,6 +35,7 @@ app.post('/skip-validation', (req, res) => {
     }
 });
 
+// Usar el puerto asignado por Render, o 3000 como valor por defecto
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor backend corriendo en http://localhost:${PORT}`);
