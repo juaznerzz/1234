@@ -1,13 +1,18 @@
 {
-  "name": "api-licencias-wild",
+  "name": "licencias-validacion",
   "version": "1.0.0",
-  "description": "API para validar licencias con clave fake123",
+  "description": "Servidor para la validación de licencias",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-  "express": "^4.17.1"
-  }
+    "express": "^4.17.1",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": "14.x"
+  },
+  "author": "Tu Nombre",
+  "license": "MIT"
 }
